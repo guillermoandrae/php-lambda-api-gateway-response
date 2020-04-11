@@ -1,15 +1,14 @@
 {
-    "name": "guillermoandrae/php-skeleton",
-    "description": "Skeleton for PHP projects",
+    "name": "guillermoandrae/php-lambda-api-gateway-response",
+    "description": "Builds responses for Amazon API Gateway integrations.",
     "license": "MIT",
     "require": {
         "php": ">=7.2",
-        "guillermoandrae/php-debug": "^0.2.0",
-        "icanboogie/inflector": "^1.5"
+        "ext-json": "^1.6"
     },
     "autoload": {
         "psr-4": {
-            "Guillermoandrae\\": "src/"
+            "Guillermoandrae\\Lambda\\": "src/"
         }
     },
     "require-dev": {
@@ -18,7 +17,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "GuillermoandraeTest\\": "tests/"
+            "GuillermoandraeTest\\Lambda\\": "tests/"
         }
     },
     "scripts": {
