@@ -34,6 +34,16 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
         'Access-Control-Allow-Origin' => '*',
     ];
 
+    /**
+     * An array of data that represents the body of the response.
+     *
+     * @var array
+     */
+    protected $body = [
+        'meta' => [],
+        'data' => []
+    ];
+
     final public function setEvent(array $event): ApiGatewayResponseInterface
     {
         $this->event = $event;
@@ -67,8 +77,26 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
         return array_merge($this->headers, $this->requiredHeaders);
     }
 
+    final public function addBodyMeta(string $name, $value): ApiGatewayResponseInterface
+    {
+        $this->body['meta'][$name] = $value;
+        return $this;
+    }
+
+    final public function setBodyData(array $value): ApiGatewayResponseInterface
+    {
+        $this->body['data'] = $value;
+        return $this;
+    }
+
+    final public function getBody(): array
+    {
+        return $this->body;
+    }
+
     final public function send(): array
     {
+        $this->handle();
         return [
             'statusCode' => $this->getStatusCode(),
             'headers' => $this->getHeaders(),
@@ -76,18 +104,14 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
         ];
     }
 
-    public function getBody(): array
+    public function handle(): void
     {
         $songs = [
             ['artist' => 'Afta-1', 'songTitle' => 'Quest', 'albumTitle' => 'Aftathoughts Vol. 1'],
             ['artist' => 'Eric Lau', 'songTitle' => 'Cloud Burst', 'albumTitle' => 'Quadrivium'],
             ['artist' => 'Dr. Who Dat?', 'songTitle' => 'Braziliant Thought', 'albumTitle' => 'Beat Journey'],
         ];
-        return [
-            'meta' => [
-                'count' => count($songs)
-            ],
-            'data' => $songs
-        ];
+        $this->addBodyMeta('count', count($songs));
+        $this->setBodyData($songs);
     }
 }

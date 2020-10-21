@@ -53,11 +53,21 @@ interface ApiGatewayResponseInterface
     public function getHeaders(): array;
 
     /**
-     * Returns a response to be sent to the API Gateway.
+     * Registers body meta data with the object.
      *
-     * @return array The response.
+     * @param string $name The meta data key name.
+     * @param mixed $value The meta data value.
+     * @return ApiGatewayResponseInterface An implementation of this class.
      */
-    public function send(): array;
+    public function addBodyMeta(string $name, $value): ApiGatewayResponseInterface;
+
+    /**
+     * Registers body data with the object.
+     *
+     * @param array $value The body data value.
+     * @return ApiGatewayResponseInterface An implementation of this class.
+     */
+    public function setBodyData(array $value): ApiGatewayResponseInterface;
 
     /**
      * Returns the response body information.
@@ -65,4 +75,18 @@ interface ApiGatewayResponseInterface
      * @return array The response body.
      */
     public function getBody(): array;
+
+    /**
+     * Returns a response to be sent to the API Gateway.
+     *
+     * @return array The response.
+     */
+    public function send(): array;
+
+    /**
+     * Defines the response.
+     *
+     * @return void
+     */
+    public function handle(): void;
 }
