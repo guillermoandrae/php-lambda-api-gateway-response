@@ -2,6 +2,7 @@
 
 namespace GuillermoandraeTest\Lambda;
 
+use Guillermoandrae\Http\StatusCodes;
 use Guillermoandrae\Lambda\Contracts\AbstractApiGatewayResponse;
 use PHPUnit\Framework\TestCase;
 
@@ -41,5 +42,22 @@ final class ApiGatewayResponseTest extends TestCase
         $body = json_decode($output['body'], true);
         $this->assertEquals(200, $output['statusCode']);
         $this->assertEquals(3, $body['meta']['count']);
+    }
+
+    public function testSendWithoutBody()
+    {
+        $response = $this->getMockForAbstractClass(
+            AbstractApiGatewayResponse::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['handle']
+        );
+        $response->setStatusCode(StatusCodes::CREATED);
+        $output = $response->send();
+        $this->assertEquals(StatusCodes::CREATED, $output['statusCode']);
+        $this->assertArrayNotHasKey('body', $output);
     }
 }

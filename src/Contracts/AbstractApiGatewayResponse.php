@@ -2,6 +2,8 @@
 
 namespace Guillermoandrae\Lambda\Contracts;
 
+use Guillermoandrae\Http\StatusCodes;
+
 abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
 {
     /**
@@ -9,28 +11,28 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
      *
      * @var array
      */
-    protected $event;
+    protected array $event;
 
     /**
-     * Successful HTTP status code; returned by default.
+     * HTTP status code; OK returned by default.
      *
      * @var int
      */
-    protected $statusCode = 200;
+    protected int $statusCode = StatusCodes::OK;
 
     /**
      * An array of headers to be sent with the response.
      *
      * @var array
      */
-    protected $headers = [];
+    protected array $headers = [];
 
     /**
      * An array of headers to be sent with every response.
      *
      * @var array
      */
-    protected $requiredHeaders = [
+    protected array $requiredHeaders = [
         'Access-Control-Allow-Origin' => '*',
     ];
 
@@ -39,12 +41,9 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
      *
      * @var array
      */
-    protected $body = [
-        'meta' => [],
-        'data' => []
-    ];
+    protected array $body = [];
 
-    final public function setEvent(array $event): ApiGatewayResponseInterface
+    final public function setEvent(array $event): static
     {
         $this->event = $event;
         return $this;
@@ -55,7 +54,7 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
         return $this->event;
     }
 
-    final public function setStatusCode(int $statusCode): ApiGatewayResponseInterface
+    final public function setStatusCode(int $statusCode): static
     {
         $this->statusCode = $statusCode;
         return $this;
@@ -66,7 +65,7 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
         return $this->statusCode;
     }
 
-    final public function addHeader(string $name, $value): ApiGatewayResponseInterface
+    final public function addHeader(string $name, $value): static
     {
         $this->headers[$name] = $value;
         return $this;
@@ -77,13 +76,16 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
         return array_merge($this->headers, $this->requiredHeaders);
     }
 
-    final public function addBodyMeta(string $name, $value): ApiGatewayResponseInterface
+    final public function addBodyMeta(string $name, $value): static
     {
+        if (!array_key_exists('meta', $this->body)) {
+            $this->body['meta'] = [];
+        }
         $this->body['meta'][$name] = $value;
         return $this;
     }
 
-    final public function setBodyData(array $value): ApiGatewayResponseInterface
+    final public function setBodyData(array $value): static
     {
         $this->body['data'] = $value;
         return $this;
@@ -97,11 +99,14 @@ abstract class AbstractApiGatewayResponse implements ApiGatewayResponseInterface
     final public function send(): array
     {
         $this->handle();
-        return [
+        $response = [
             'statusCode' => $this->getStatusCode(),
             'headers' => $this->getHeaders(),
-            'body' => json_encode($this->getBody())
         ];
+        if ($this->body) {
+            $response['body'] = json_encode($this->getBody());
+        }
+        return $response;
     }
 
     public function handle(): void

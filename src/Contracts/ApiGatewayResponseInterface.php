@@ -10,9 +10,9 @@ interface ApiGatewayResponseInterface
      * Registers the request event information with this object.
      *
      * @param array $event The event data from the API Gateway request.
-     * @return ApiGatewayResponseInterface An implementation of this class.
+     * @return static An implementation of this class.
      */
-    public function setEvent(array $event): ApiGatewayResponseInterface;
+    public function setEvent(array $event): static;
 
     /**
      * Returns the request event information.
@@ -25,9 +25,9 @@ interface ApiGatewayResponseInterface
      * Registers the HTTP status code with the object.
      *
      * @param int $statusCode The HTTP status code.
-     * @return ApiGatewayResponseInterface An implementation of this class.
+     * @return static An implementation of this class.
      */
-    public function setStatusCode(int $statusCode): ApiGatewayResponseInterface;
+    public function setStatusCode(int $statusCode): static;
 
     /**
      * Returns the HTTP status code.
@@ -41,9 +41,9 @@ interface ApiGatewayResponseInterface
      *
      * @param string $name The header name.
      * @param mixed $value The header value.
-     * @return ApiGatewayResponseInterface An implementation of this class.
+     * @return static An implementation of this class.
      */
-    public function addHeader(string $name, $value): ApiGatewayResponseInterface;
+    public function addHeader(string $name, mixed $value): static;
 
     /**
      * Returns an array of headers to be sent with the response.
@@ -57,17 +57,17 @@ interface ApiGatewayResponseInterface
      *
      * @param string $name The meta data key name.
      * @param mixed $value The meta data value.
-     * @return ApiGatewayResponseInterface An implementation of this class.
+     * @return static An implementation of this class.
      */
-    public function addBodyMeta(string $name, $value): ApiGatewayResponseInterface;
+    public function addBodyMeta(string $name, mixed $value): static;
 
     /**
      * Registers body data with the object.
      *
      * @param array $value The body data value.
-     * @return ApiGatewayResponseInterface An implementation of this class.
+     * @return static An implementation of this class.
      */
-    public function setBodyData(array $value): ApiGatewayResponseInterface;
+    public function setBodyData(array $value): static;
 
     /**
      * Returns the response body information.
